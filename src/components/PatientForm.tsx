@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { User, Calendar, AlertTriangle, FileText, Thermometer, Pill, Send } from 'lucide-react';
+import { User, Calendar, AlertTriangle, FileText, Thermometer, Pill, Send, Heart, Droplets } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PatientInput, MEDICAL_CONDITIONS, SYMPTOMS, COMMON_ALLERGIES } from '@/types/medical';
+import { PatientInput, MEDICAL_CONDITIONS, SYMPTOMS, COMMON_ALLERGIES, BLOOD_TYPES } from '@/types/medical';
 
 interface PatientFormProps {
   onSubmit: (data: PatientInput) => void;
@@ -16,6 +16,8 @@ interface PatientFormProps {
 export const PatientForm = ({ onSubmit, isLoading }: PatientFormProps) => {
   const [age, setAge] = useState<string>('');
   const [gender, setGender] = useState<'male' | 'female' | 'other'>('male');
+  const [heartRate, setHeartRate] = useState<string>('');
+  const [bloodType, setBloodType] = useState<string>('');
   const [allergies, setAllergies] = useState<string[]>([]);
   const [medicalHistory, setMedicalHistory] = useState<string[]>([]);
   const [symptoms, setSymptoms] = useState<string[]>([]);
@@ -26,6 +28,8 @@ export const PatientForm = ({ onSubmit, isLoading }: PatientFormProps) => {
     onSubmit({
       age: parseInt(age) || 0,
       gender,
+      heartRate: parseInt(heartRate) || 72,
+      bloodType: bloodType || 'Unknown',
       allergies,
       medicalHistory,
       symptoms,
@@ -56,7 +60,7 @@ export const PatientForm = ({ onSubmit, isLoading }: PatientFormProps) => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label htmlFor="age" className="flex items-center gap-2 text-foreground">
                 <Calendar className="w-4 h-4 text-muted-foreground" />
@@ -87,6 +91,38 @@ export const PatientForm = ({ onSubmit, isLoading }: PatientFormProps) => {
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="heartRate" className="flex items-center gap-2 text-foreground">
+                <Heart className="w-4 h-4 text-destructive" />
+                Heart Rate (bpm)
+              </Label>
+              <Input
+                id="heartRate"
+                type="number"
+                placeholder="e.g., 72"
+                value={heartRate}
+                onChange={(e) => setHeartRate(e.target.value)}
+                min="30"
+                max="220"
+                className="bg-background"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="bloodType" className="flex items-center gap-2 text-foreground">
+                <Droplets className="w-4 h-4 text-destructive" />
+                Blood Type
+              </Label>
+              <Select value={bloodType} onValueChange={setBloodType}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Select blood type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {BLOOD_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

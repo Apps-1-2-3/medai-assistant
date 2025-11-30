@@ -14,12 +14,14 @@ const Index = () => {
     setIsLoading(true);
     setResult(null);
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const recommendation = generateRecommendation(data);
-    setResult(recommendation);
-    setIsLoading(false);
+    try {
+      const recommendation = await generateRecommendation(data);
+      setResult(recommendation);
+    } catch (error) {
+      console.error('Error generating recommendation:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
