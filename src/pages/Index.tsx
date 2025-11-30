@@ -1,12 +1,49 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { PatientForm } from '@/components/PatientForm';
+import { RecommendationResults } from '@/components/RecommendationResults';
+import { PatientInput, RecommendationResult } from '@/types/medical';
+import { generateRecommendation } from '@/lib/mockPrediction';
 
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState<RecommendationResult | null>(null);
+
+  const handleSubmit = async (data: PatientInput) => {
+    setIsLoading(true);
+    setResult(null);
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    const recommendation = generateRecommendation(data);
+    setResult(recommendation);
+    setIsLoading(false);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex flex-col bg-background">
+      <Header />
+      
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <PatientForm onSubmit={handleSubmit} isLoading={isLoading} />
+          
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center py-12 space-y-4">
+              <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <p className="text-muted-foreground">Analyzing patient data and generating recommendations...</p>
+            </div>
+          )}
+          
+          {result && !isLoading && (
+            <RecommendationResults result={result} />
+          )}
+        </div>
+      </main>
+      
+      <Footer />
     </div>
   );
 };
