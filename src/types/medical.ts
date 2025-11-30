@@ -1,6 +1,8 @@
 export interface PatientInput {
   age: number;
   gender: 'male' | 'female' | 'other';
+  heartRate: number;
+  bloodType: string;
   allergies: string[];
   medicalHistory: string[];
   symptoms: string[];
@@ -12,6 +14,9 @@ export interface DrugRecommendation {
   confidence: number;
   dosage: string;
   frequency: string;
+  effectiveness?: string;
+  sideEffectsRisk?: string;
+  conditionMatch?: string;
 }
 
 export interface ShapExplanation {
@@ -70,4 +75,15 @@ export const COMMON_ALLERGIES = [
   'Morphine',
   'Latex',
   'Contrast Dye',
+] as const;
+
+export const BLOOD_TYPES = [
+  'A+',
+  'A-',
+  'B+',
+  'B-',
+  'AB+',
+  'AB-',
+  'O+',
+  'O-',
 ] as const;
