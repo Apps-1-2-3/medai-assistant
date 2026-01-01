@@ -2,6 +2,7 @@
 FastAPI microservice for SHAP-based drug recommendation.
 Lightweight enough to run on 8GB RAM laptops.
 """
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -32,7 +33,7 @@ class PatientInput(BaseModel):
     allergies: List[str]
     medical_history: List[str]
     symptoms: List[str]
-    current_medications: str
+    current_medications: List[str]
 
 class DrugRecommendation(BaseModel):
     name: str
